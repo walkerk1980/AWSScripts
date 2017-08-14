@@ -4,7 +4,18 @@ roletoassumearn='arn:aws:iam::123456789012:role/rolename'
 sessionname='session1'
 rolename='rolename'
 
-echo "usage assumeRole.sh 'arn:aws:iam::123456789012:role/rolename' 'session1'"
+if [ -z "$1" ];then
+  echo
+else
+  roletoassumearn=$1
+fi
+if [ -z "$2" ];then
+  echo
+else
+  rolename=$2
+fi
+
+echo "usage assumeRole.sh "$roletoassumearn" "$rolename
 
 curlResult=$(curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials/$rolename)
 
@@ -24,3 +35,6 @@ export AWS_SECRET_ACCESS_KEY=$SessionSecretAccessKey
 export AWS_SESSION_TOKEN=$SessionTok
 
 echo -e "\nThe credentials you have exported will expire at $SessionExpiration"
+
+
+
