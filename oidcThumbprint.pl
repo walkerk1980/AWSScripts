@@ -5,6 +5,7 @@
 # Obtaining the Thumbprint for an OpenID Connect Identity Provider 
 # http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html
 
+#requires bash
 #requires jq package
 #requires perl
 #requires openssl
