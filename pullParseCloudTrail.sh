@@ -16,6 +16,7 @@ cd ctlogs/
 aws s3 cp s3://$bucket/AWSLogs/$account/CloudTrail/$region/$year/$month/$day/ ./ --recursive
 aws s3 cp s3://$bucket/$prefix/AWSLogs/$account/CloudTrail/$region/$year/$month/$day/ ./ --recursive
 
+#parse API calls via used AKID
 #without jq package installed
 zgrep -r $akid *|cut -d ':' -f2-999
 
