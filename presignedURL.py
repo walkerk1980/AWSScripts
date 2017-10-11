@@ -4,7 +4,7 @@ import boto3
 import requests
 from botocore.client import Config
 
-region = input('Please enter your bucket's region (e.g. \'us-east-1\'):')
+region = input('Please enter your bucket\'s region (e.g. \'us-east-1\'):')
 
 #instantiate client
 s3 = boto3.client('s3',region_name=region, config=Config(s3={'addressing_style': 'path'}))
