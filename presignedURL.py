@@ -27,7 +27,7 @@ except OSError as err:
   print("Local File Error: {0}".format(err))
   exit()
 
-#param for request
+#generate presigned post for request
 post = s3.generate_presigned_post(
     ExpiresIn=172800,
     Bucket=upload_bucket,
@@ -35,7 +35,7 @@ post = s3.generate_presigned_post(
 )
 
 #http://boto3.readthedocs.io/en/latest/reference/services/s3.html#S3.Client.generate_presigned_url
-#upload file
+#upload file post request
 requests.post(post['url'], data=post['fields'], files=file)
 
 #generate presgined download url
