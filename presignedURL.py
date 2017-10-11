@@ -2,6 +2,7 @@
 import boto3
 #http://docs.python-requests.org/en/master/
 import requests
+import sys
 from botocore.client import Config
 
 region = input('Please enter your bucket\'s region (e.g. \'us-east-1\'):')
@@ -20,7 +21,12 @@ fileName = input('What is the full path of the local file you want to upload: ')
 
 #http://boto3.readthedocs.io/en/latest/reference/services/s3.html#S3.Client.generate_presigned_post
 #param for request, file handle, read binary
-file = {'file': open(fileName, 'rb')}
+try:
+  file = {'file': open(fileName, 'rb')}
+except OSError as err:
+  print("File Error: {0}".format(err))
+  exit()
+
 
 #param for request
 post = s3.generate_presigned_post(
