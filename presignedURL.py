@@ -18,7 +18,7 @@ key_name = input('What would you like the file to be name in your bucket: ')
 fileName = input('What is the full path of the local file you want to upload: ')
 
 #http://boto3.readthedocs.io/en/latest/reference/services/s3.html#S3.Client.generate_presigned_post
-#param for request
+#param for request, file handle, read binary
 file = {'file': open(fileName, 'rb')}
 
 #param for request
