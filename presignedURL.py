@@ -24,7 +24,7 @@ fileName = input('What is the full path of the local file you want to upload: ')
 try:
   file = {'file': open(fileName, 'rb')}
 except OSError as err:
-  print("File Error: {0}".format(err))
+  print("Local File Error: {0}".format(err))
   exit()
 
 
