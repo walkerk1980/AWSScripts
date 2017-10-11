@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import boto3
+#http://docs.python-requests.org/en/master/
 import requests
 from botocore.client import Config
 
