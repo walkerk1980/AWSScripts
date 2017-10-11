@@ -27,7 +27,6 @@ except OSError as err:
   print("Local File Error: {0}".format(err))
   exit()
 
-
 #param for request
 post = s3.generate_presigned_post(
     ExpiresIn=172800,
