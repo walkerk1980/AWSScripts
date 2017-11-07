@@ -1,10 +1,15 @@
 #!/bin/bash
-#requires jq, you can get this via apt/yum install jq on linux or brew install jq on a mac with brew installed
 
 distroid=E14G27FBGS5G7M
-aws cloudfront get-distribution --id $distroid >distro.config
-etag=$(cat distro.config |jq '.ETag'|sed 's/"//g')
-cat distro.config | jq '.Distribution.DistributionConfig' >distro.json
+
+if [ -z "$1" ];then
+  echo
+else
+  distroid=$1
+fi
+
+aws cloudfront get-distribution --id $distroid --query Distribution.DistributionConfig >distro.json
+etag=$(aws cloudfront get-distribution --id $distroid --query ETag|sed 's/"//g')
 
 #set preferred editor vim, nano, etc
 nano distro.json
@@ -17,4 +22,4 @@ read $input
 aws cloudfront update-distribution --id $distroid --distribution-config file://distro.json --if-match $etag
 
 #optional
-rm -v distro.config distro.json
+rm -v distro.json
