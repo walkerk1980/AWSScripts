@@ -8,15 +8,26 @@ import urllib.error
 import json
 import argparse
 
-default_regions = ['us-east-1','us-east-2','us-west-1','us-west-2','ap-northeast-1','ap-northeast-2','ap-northeast-3','ap-south-1','ap-southeast-1','ap-southeast-2','ca-central-1','cn-north-1','cn-northwest-1','eu-central-1','eu-west-1','eu-west-2','eu-west-3','sa-east-1']
+default_regions = ['us-east-1', 'us-east-2', 'us-west-1', 'us-west-2', 'ap-northeast-1', 'ap-northeast-2', 'ap-northeast-3', 'ap-south-1', 'ap-southeast-1', 'ap-southeast-2', 'ca-central-1', 'cn-north-1', 'cn-northwest-1', 'eu-central-1', 'eu-west-1', 'eu-west-2', 'eu-west-3', 'sa-east-1']
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-4', '--ipv4', nargs='?', const='4', help='Display IPv4 Addresses only')
 parser.add_argument('-6', '--ipv6',  nargs='?', const='6', help='Display IPv6 Addresses only')
 parser.add_argument('-64', '-46', '--ipAll',  nargs='?', const='46', help='Display IPv4 IPv6 Addresses')
-parser.add_argument('-r', '--regions', default=default_regions, help='Display Addresses only for Regions specified as csv list')
+parser.add_argument('-r', '--regions', default=default_regions, choices=default_regions, help='Display Addresses only for Regions specified as csv list')
 parser.add_argument('-s', '--services', help='Display Addresses only for AWS Services specified in csv list')
 args = parser.parse_args()
+
+def print_ip_error():
+  parser.print_help()
+  print('\nYou must choose an IP version with -4 -6 or -46\n')
+
+if len(sys.argv) <=1:
+  print_ip_error()
+
+if (not args.ipv4 and not args.ipv6 and not args.ipAll):
+  print_ip_error()
+
 
 def get_ranges(url):
   try:
@@ -53,7 +64,6 @@ def get_ipv6(range_json,region=default_regions):
         ipv6_prefixes += prefix['ipv6_prefix']
   return ipv6_prefixes
 
-
 ranges = get_ranges('https://ip-ranges.amazonaws.com/ip-ranges.json')
 
 if args.ipv4:
@@ -65,3 +75,4 @@ if args.ipv6:
 if args.ipAll:
   print(get_ipv4(ranges,args.regions))
   print(get_ipv6(ranges,args.regions))
+
