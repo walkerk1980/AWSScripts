@@ -14,7 +14,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-4', '--ipv4', nargs='?', const='4', help='Display IPv4 Addresses only')
 parser.add_argument('-6', '--ipv6',  nargs='?', const='6', help='Display IPv6 Addresses only')
 parser.add_argument('-64', '-46', '--ipAll',  nargs='?', const='46', help='Display IPv4 IPv6 Addresses')
-parser.add_argument('-r', '--regions', default=default_regions, help='Display Addresses only for Regions specified as csv')
+parser.add_argument('-r', '--regions', default=default_regions, help='Display Addresses only for Regions specified as csv list')
+parser.add_argument('-s', '--services', help='Display Addresses only for AWS Services specified in csv list')
 args = parser.parse_args()
 
 def get_ranges(url):
@@ -29,18 +30,29 @@ def get_ranges(url):
 def get_ipv4(range_json,region=default_regions):
   ipv4_prefixes=''
   for prefix in range_json['prefixes']:
-    if (prefix['region'] in region):
-      ipv4_prefixes += '\n'
-      ipv4_prefixes += prefix['ip_prefix']
+    if args.services:
+      if ((prefix['region'] in region) and (prefix['service'] in args.services.upper())):
+        ipv4_prefixes += '\n'
+        ipv4_prefixes += prefix['ip_prefix']
+    else:
+      if (prefix['region'] in region):
+        ipv4_prefixes += '\n'
+        ipv4_prefixes += prefix['ip_prefix']
   return ipv4_prefixes
 
 def get_ipv6(range_json,region=default_regions):
   ipv6_prefixes=''
   for prefix in range_json['ipv6_prefixes']:
-    if (prefix['region'] in region):
-      ipv6_prefixes += '\n'
-      ipv6_prefixes += prefix['ipv6_prefix']
+    if args.services:
+      if ((prefix['region'] in region) and (prefix['service'] in args.services.upper())):
+        ipv6_prefixes += '\n'
+        ipv6_prefixes += prefix['ipv6_prefix']
+    else:
+      if (prefix['region'] in region):
+        ipv6_prefixes += '\n'
+        ipv6_prefixes += prefix['ipv6_prefix']
   return ipv6_prefixes
+
 
 ranges = get_ranges('https://ip-ranges.amazonaws.com/ip-ranges.json')
 
@@ -53,4 +65,3 @@ if args.ipv6:
 if args.ipAll:
   print(get_ipv4(ranges,args.regions))
   print(get_ipv6(ranges,args.regions))
-
