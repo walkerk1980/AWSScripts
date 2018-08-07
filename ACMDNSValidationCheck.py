@@ -30,6 +30,12 @@ dns_resolver.nameservers = nameserver
 acm = boto3.client('acm', region_name=region)
 r53 = boto3.client('route53')
 
+def read():
+  if sys.version_info[0] < 3:
+    return(raw_input())
+  else:
+    return(input())
+
 def exit_prog(return_code):
     print('Exiting..')
     exit(return_code)
@@ -37,16 +43,19 @@ def exit_prog(return_code):
 def continue_or_exit(message):
   print(message)
   print('Do you want to continue? (y/n)')
-  if sys.version_info[0] < 3:
-    if str(raw_input()).lower() == 'y':
-      print('Continuing...')
-    else:
-      exit_prog(0)
+  if str(read()).lower() == 'y':
+    print('Continuing...')
   else:
-    if str(input()).lower() == 'y':
-      print('Continuing...')
-    else:
-      exit_prog(0)
+    exit_prog(0)
+
+def continue_yn(message):
+  print(message)
+  print('Do you want to continue? (y/n)')
+  if str(read()).lower() == 'y':
+    print('Continuing...')
+    return(1)
+  else:
+    return(0)
 
 def list_pending_certs():
   print('\n\rCertificates pending DNS Validation: ')
@@ -114,6 +123,9 @@ def get_hosted_zone_by_domain(domain):
           print('\n\rThis Hosted Zone\'s Delegation and NS records for domain match!')
           print(hz_delegation)
           print(domain_ns)
+          create_rr=continue_yn('\n\rI can add a CNAME record for this certificate in this hosted zone: ' + hosted_zone_id)
+          if create_rr == 1:
+            create_record_set()
         else:
           print('This Hosted Zone\'s Delegation does not match NS records for domain.')
 
@@ -148,7 +160,8 @@ def get_domain_ns(domain):
     return([])
 
 def create_record_set():
-  print('a')
+  print('Creating DNS Record')
+
 
 list_pending_certs()
 
