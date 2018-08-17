@@ -27,4 +27,4 @@ url = s3.generate_presigned_url(
     HttpMethod='PUT'
 )
 
-print('Please copy the below and share it with the person you wish to receive the file from:\n\r\n\r' + 'curl --request PUT --upload-file /path/to/file.tar ' + '"' + str(url) + '"' + '\n\r')
+print('Please copy the below and share it with the person you wish to receive the file from:\n\r\n\r' + 'curl --request PUT --upload-file /path/to/file.tar "' + str(url) + '" -# > /dev/null' + '\n\r')
